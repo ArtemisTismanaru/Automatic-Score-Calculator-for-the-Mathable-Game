@@ -84,53 +84,26 @@ The system successfully:
 - Recognizes numeric values on the pieces
 - Calculates scores according to Mathable rules
 
-## 🚀 Installation and Usage
+```
+#example score
+Player1 1 152
+Player2 5 170
+Player1 11 28
+Player2 14 35
+Player1 18 16
+Player2 21 30
+Player1 24 128
+Player2 28 126
+Player1 31 111
+Player2 34 13
+Player1 36 10
+Player2 39 147
+Player1 43 38
+Player2 48 13
 
-### Prerequisites
-- Python 3.6 or higher
-- OpenCV
-- NumPy
-- Additional dependencies listed in requirements.txt
-
-### Setup
-
-```bash
-# Clone this repository
-git clone https://github.com/yourusername/mathable-score-calculator.git
-
-# Navigate to the project directory
-cd mathable-score-calculator
-
-# Install required dependencies
-pip install -r requirements.txt
 ```
 
-### Running the Application
 
-```bash
-# Run the full pipeline
-python main.py --input_folder=path/to/images --output_folder=results
-
-# Run individual tasks
-python main.py --task=1  # Piece position detection
-python main.py --task=2  # Number recognition
-python main.py --task=3  # Score calculation
-```
-
-## 📁 Project Structure
-
-```
-project/
-├── main.py                   # Main execution script
-├── board_detection.py        # Functions for detecting the game board
-├── piece_recognition.py      # Functions for recognizing pieces and values
-├── score_calculation.py      # Logic for calculating player scores
-├── templates/                # Number templates for matching
-├── docs/                     # Documentation and examples
-│   └── images/               # Example images
-├── results/                  # Output folder
-└── requirements.txt          # Required dependencies
-```
 
 ## 👩‍💻 Author
 
