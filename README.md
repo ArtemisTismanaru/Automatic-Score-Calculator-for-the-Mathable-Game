@@ -7,8 +7,9 @@ Introduction The Mathable Board Game project automates game board analysis and s
 [![OpenCV](https://img.shields.io/badge/OpenCV-4.5+-green.svg)](https://opencv.org/)
 
 <p align="center">
-  <img src="docs/images/mathable_board.png" alt="Mathable Game Board" width="400"/>
+  <img src="https://github.com/user-attachments/assets/7abcaf86-a4b4-41b9-8d01-1ecd2a17a74c" alt="Mathable Game Board" width="400"/>
 </p>
+
 
 ## 📋 Overview
 An intelligent computer vision system that automates score calculation for the Mathable board game. This project applies image processing techniques and Python algorithms to identify the game board, detect placed pieces, recognize their values, and calculate scores according to official game rules.
