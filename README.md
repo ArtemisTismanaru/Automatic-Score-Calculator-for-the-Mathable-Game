@@ -1,43 +1,46 @@
-# Automatic-Score-Calculator-for-the-Mathable-Game
-Introduction The Mathable Board Game project automates game board analysis and score calculation using computer vision techniques and Python algorithms. Objective To develop software that identifies the board, game pieces, positions, and values, calculating scores according to Mathable rules.
 # Mathable Automatic Score Calculator
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.6+](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/downloads/)
-[![OpenCV](https://img.shields.io/badge/OpenCV-4.5+-green.svg)](https://opencv.org/)
+[![OpenCV](https://img.shields.io/badge/OpenCV-4.x-green.svg)](https://opencv.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/7abcaf86-a4b4-41b9-8d01-1ecd2a17a74c" alt="Mathable Game Board" width="400"/>
-</p>
+  <img src="https://github.com/user-attachments/assets/f275ff4c-f908-4224-aae4-de9a3cc70e9a" alt="Mathable Game Board" width="400"/>
+</p> 
 
 
 ## 📋 Overview
-An intelligent computer vision system that automates score calculation for the Mathable board game. This project applies image processing techniques and Python algorithms to identify the game board, detect placed pieces, recognize their values, and calculate scores according to official game rules.
 
-## ✨ Features
+An intelligent computer vision system that automatically calculates scores for the Mathable board game. The project applies image processing techniques to detect the game board, identify newly placed pieces, recognize their values, and calculate player scores according to the official Mathable rules.
 
-- **Automated Board Recognition**: Detects and isolates the Mathable game board from images
-- **Piece Detection and Value Extraction**: Identifies newly placed pieces and their numerical values
-- **Rule Enforcement**: Validates moves according to Mathable's mathematical operation rules
-- **Score Calculation**: Automatically calculates scores including bonus squares
-- **Game State Tracking**: Follows the game progression through multiple moves
-- **Template Matching**: Uses custom OCR approach for accurate piece value recognition
+## 🎲 About Mathable
 
-## 🔧 Tech Stack
+Mathable is a mathematical board game similar to Scrabble but using numbers instead of letters:
+- Players place numbered tiles on a 14×14 grid board to form valid mathematical equations
+- The board contains regular squares, constraint squares with mathematical operators, and bonus squares
+- Players score points based on the numerical value of placed pieces, with bonus multipliers for special squares
+- Equations are formed by addition, subtraction, multiplication, or division of adjacent pieces
 
-- **Python 3.6+**: Core programming language
-- **OpenCV**: Image processing and computer vision operations
-- **NumPy**: Numerical operations and matrix handling
-- **Matplotlib**: Visualization of images and processing steps (optional)
+## ✨ Key Features
 
-## 🖼️ How It Works
+- **Automated Board Detection**: Extracts and processes the Mathable game board from images
+- **Piece Position Identification**: Determines where new pieces have been placed on the board
+- **Number Recognition**: Uses custom OCR techniques to identify the numerical values of placed pieces
+- **Score Calculation**: Implements all Mathable scoring rules including:
+  - Base scores (the value of the placed piece)
+  - Double and triple point multipliers
+  - Multiple equation bonuses
+- **Game State Tracking**: Follows the game progression through multiple rounds
 
-### 1. Board Detection and Processing
-The system uses a multi-step approach to extract and process the game board:
+## 🛠️ Technical Implementation
+
+### Board and Piece Detection
+
+The system processes images using OpenCV to identify the game board and detect piece placements:
 
 ```python
-# Apply Gaussian filter to reduce image noise
-blurred_image = cv2.GaussianBlur(image, (5, 5), 0)
+# Apply Gaussian filter to reduce noise
+blurred_image = cv2.GaussianBlur(blue, (5, 5), 0)
 
 # Apply thresholding to create binary image
 _, thresh = cv2.threshold(blurred_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
@@ -46,21 +49,50 @@ _, thresh = cv2.threshold(blurred_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_
 contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 ```
 
-### 2. Template Creation and Matching
-The system creates templates for number recognition:
+### Template Matching for Number Recognition
 
-<p align="center">
-  <img src="docs/images/number_template.png" alt="Number Template Example" width="100"/>
-</p>
+The system creates and uses templates to recognize piece values:
 
-### 3. Game Rules Implementation
-The board is internally represented as a matrix where:
-- `30`: Triple bonus squares
-- `20`: Double bonus squares
-- `11-14`: Mathematical operations (addition, subtraction, multiplication, division)
-- `-1`: Empty cells
+```python
+# Loop through templates for matching
+for i in lista_templates:
+    template = cv2.imread(f"./templates/{i}.jpg")
+    template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+    template = cv2.GaussianBlur(template, (5, 5), 0)
+    _, template = cv2.threshold(template, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+    result = cv2.matchTemplate(roi_mega, template, cv2.TM_CCOEFF_NORMED)
+    corr = np.max(result)
+    # Find best match
+    if i < 10:
+        dict_cifre_similaritati[i] = corr
+    else:
+        dict_numere_similaritati[i] = corr
+```
 
-## 🚀 Installation
+### Score Calculation
+
+Three main functions handle the scoring logic:
+
+1. **`verifica_bonus()`**: Determines if a piece placement satisfies mathematical constraints
+2. **`verifica_constrangeri()`**: Calculates scores based on piece value and board position  
+3. **`proceseaza_miscari()`**: Manages game flow and accumulates scores for each player
+
+## 📊 Results
+
+The system successfully:
+- Detects piece positions with high accuracy
+- Recognizes numeric values on the pieces
+- Calculates scores according to Mathable rules
+
+## 🚀 Installation and Usage
+
+### Prerequisites
+- Python 3.6 or higher
+- OpenCV
+- NumPy
+- Additional dependencies listed in requirements.txt
+
+### Setup
 
 ```bash
 # Clone this repository
@@ -69,41 +101,49 @@ git clone https://github.com/yourusername/mathable-score-calculator.git
 # Navigate to the project directory
 cd mathable-score-calculator
 
-# Install the required dependencies
+# Install required dependencies
 pip install -r requirements.txt
 ```
 
-## 💻 Usage
+### Running the Application
 
 ```bash
-# Basic usage
-python main.py --input_folder path/to/game/images
+# Run the full pipeline
+python main.py --input_folder=path/to/images --output_folder=results
 
-# Specify a game number (for multiple games)
-python main.py --input_folder path/to/game/images --game_number 1
+# Run individual tasks
+python main.py --task=1  # Piece position detection
+python main.py --task=2  # Number recognition
+python main.py --task=3  # Score calculation
 ```
 
-## 📊 Results
-The system outputs the calculated scores for each player after processing all moves:
+## 📁 Project Structure
 
 ```
-Game 1 Results:
-Player 1: 76 points
-Player 2: 89 points
+project/
+├── main.py                   # Main execution script
+├── board_detection.py        # Functions for detecting the game board
+├── piece_recognition.py      # Functions for recognizing pieces and values
+├── score_calculation.py      # Logic for calculating player scores
+├── templates/                # Number templates for matching
+├── docs/                     # Documentation and examples
+│   └── images/               # Example images
+├── results/                  # Output folder
+└── requirements.txt          # Required dependencies
 ```
 
-## 🛠️ Main Functions
+## 👩‍💻 Author
 
-1. **verifica_bonus()**: Validates mathematical relationships between pieces
-2. **verifica_constrangeri()**: Calculates scores including bonuses
-3. **proceseaza_miscari()**: Processes game moves sequentially
+**Tismanaru Artemis**  
+Computer Vision and Artificial Intelligence  
+University of Bucharest
 
-## 📄 License
+## 📝 License
+
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👤 Author
-Tismanaru Artemis
 
 ---
 
-<p align="center">Made with ❤️ for the love of board games and computer vision</p>
+<p align="center">
+  Made with ❤️ for computer vision and board games
+</p>
